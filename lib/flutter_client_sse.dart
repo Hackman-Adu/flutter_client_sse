@@ -170,8 +170,8 @@ class SSEClient {
   }
 
   /// Unsubscribe from the SSE.
-  static void unsubscribeFromSSE() {
-    if (!streamController.isClosed) streamController.close();
+  static Future unsubscribeFromSSE() async {
     _client.close();
+    await streamController.close();
   }
 }
