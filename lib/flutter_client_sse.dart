@@ -114,7 +114,6 @@ class SSEClient {
                     break;
                   default:
                     print('---ERROR---');
-                    print(dataLine);
                     _retryConnection(
                       method: method,
                       url: url,
@@ -124,8 +123,7 @@ class SSEClient {
                 }
               },
               onError: (e, s) {
-                print('---ERROR---');
-                print(e);
+                print('---ERROR--- $e');
                 _retryConnection(
                   method: method,
                   url: url,
@@ -136,8 +134,7 @@ class SSEClient {
               },
             );
         }, onError: (e, s) {
-          print('---ERROR---');
-          print(e);
+          print('---ERROR--- $e');
           _retryConnection(
             method: method,
             url: url,
@@ -147,8 +144,7 @@ class SSEClient {
           );
         });
       } catch (e) {
-        print('---ERROR---');
-        print(e);
+        print('---ERROR--- $e');
         _retryConnection(
           method: method,
           url: url,
