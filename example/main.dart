@@ -3,7 +3,7 @@ import 'package:flutter_client_sse/flutter_client_sse.dart';
 
 void main() {
   ///GET REQUEST
-  SSEClient.subscribeToSSE(
+  SSEClient().subscribeToSSE(
       method: SSERequestType.GET,
       url: 'http://localhost:3000/sse',
       header: {
@@ -20,7 +20,7 @@ void main() {
   );
 
   ///POST REQUEST
-  SSEClient.subscribeToSSE(
+  SSEClient().subscribeToSSE(
       method: SSERequestType.POST,
       url:
           'http://192.168.1.2:3000/api/activity-stream?historySnapshot=FIVE_MINUTE',

@@ -10,7 +10,7 @@ part 'sse_event_model.dart';
 
 /// A client for subscribing to Server-Sent Events (SSE).
 class SSEClient {
-  static http.Client _client = new http.Client();
+  http.Client _client = new http.Client();
 
   /// Retry the SSE connection after a delay.
   ///
@@ -19,7 +19,7 @@ class SSEClient {
   /// [header] is a map of request headers.
   /// [body] is an optional request body for POST requests.
   /// [streamController] is required to persist the stream from the old connection
-  static void _retryConnection(
+  void _retryConnection(
       {required SSERequestType method,
       required String url,
       required Map<String, String> header,
@@ -27,13 +27,7 @@ class SSEClient {
       Map<String, dynamic>? body}) {
     print('---RETRY CONNECTION---');
     Future.delayed(Duration(seconds: 5), () {
-      subscribeToSSE(
-        method: method,
-        url: url,
-        header: header,
-        body: body,
-        oldStreamController: streamController,
-      );
+      subscribeToSSE(method: method, url: url, header: header, body: body);
     });
   }
 
@@ -46,15 +40,13 @@ class SSEClient {
   ///
   /// Returns a [Stream] of [SSEModel] representing the SSE events.
 
-  static StreamController<SSEModel> streamController = StreamController();
+  StreamController<SSEModel> streamController = StreamController();
 
-  static Stream<SSEModel> subscribeToSSE(
+  Stream<SSEModel> subscribeToSSE(
       {required SSERequestType method,
       required String url,
       required Map<String, String> header,
-      StreamController<SSEModel>? oldStreamController,
       Map<String, dynamic>? body}) {
-    if (oldStreamController != null) streamController = oldStreamController;
     var lineRegex = RegExp(r'^([^:]*)(?::)?(?: )?(.*)?$');
     var currentSSEModel = SSEModel(data: '', id: '', event: '');
     print("--SUBSCRIBING TO SSE---");
@@ -170,7 +162,7 @@ class SSEClient {
   }
 
   /// Unsubscribe from the SSE.
-  static Future unsubscribeFromSSE() async {
+  Future unsubscribeFromSSE() async {
     _client.close();
     await streamController.close();
   }
