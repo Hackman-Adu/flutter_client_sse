@@ -2,8 +2,10 @@ library flutter_client_sse;
 
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
 import 'package:http/http.dart' as http;
+
 part 'sse_event_model.dart';
 
 /// A client for subscribing to Server-Sent Events (SSE).
@@ -43,16 +45,16 @@ class SSEClient {
   /// [body] is an optional request body for POST requests.
   ///
   /// Returns a [Stream] of [SSEModel] representing the SSE events.
+
+  static StreamController<SSEModel> streamController = StreamController();
+
   static Stream<SSEModel> subscribeToSSE(
       {required SSERequestType method,
       required String url,
       required Map<String, String> header,
       StreamController<SSEModel>? oldStreamController,
       Map<String, dynamic>? body}) {
-    StreamController<SSEModel> streamController = StreamController();
-    if (oldStreamController != null) {
-      streamController = oldStreamController;
-    }
+    if (oldStreamController != null) streamController = oldStreamController;
     var lineRegex = RegExp(r'^([^:]*)(?::)?(?: )?(.*)?$');
     var currentSSEModel = SSEModel(data: '', id: '', event: '');
     print("--SUBSCRIBING TO SSE---");
@@ -169,6 +171,7 @@ class SSEClient {
 
   /// Unsubscribe from the SSE.
   static void unsubscribeFromSSE() {
+    if (!streamController.isClosed) streamController.close();
     _client.close();
   }
 }
