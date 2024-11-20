@@ -113,45 +113,21 @@ class SSEClient {
                   case 'retry':
                     break;
                   default:
-                    print('---ERROR---');
-                    _retryConnection(
-                      method: method,
-                      url: url,
-                      header: header,
-                      streamController: streamController,
-                    );
+                    print('No Data received');
                 }
               },
               onError: (e, s) {
-                print('---ERROR--- $e');
-                _retryConnection(
-                  method: method,
-                  url: url,
-                  header: header,
-                  body: body,
-                  streamController: streamController,
-                );
+                print('---ERROR--- ${e.toString()}');
+                return Stream.error(e);
               },
             );
         }, onError: (e, s) {
-          print('---ERROR--- $e');
-          _retryConnection(
-            method: method,
-            url: url,
-            header: header,
-            body: body,
-            streamController: streamController,
-          );
+          print('---ERROR--- ${e.toString()}');
+          return Stream.error(e);
         });
       } catch (e) {
-        print('---ERROR--- $e');
-        _retryConnection(
-          method: method,
-          url: url,
-          header: header,
-          body: body,
-          streamController: streamController,
-        );
+        print('---ERROR--- ${e.toString()}');
+        return Stream.error(e);
       }
       return streamController.stream;
     }
